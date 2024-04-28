@@ -23,8 +23,11 @@
     "openai": "^4.38.5",
     "react": "^18",
     "react-dom": "^18",
+    "react-markdown": "^9.0.1",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "xmldom": "^0.6.0",
+    "xpath": "^0.0.34"
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.6",

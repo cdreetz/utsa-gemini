@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Message, useChat } from "ai/react";
+import ReactMarkdown from 'react-markdown';
 
 interface ChatComponentProps {
   initialMessages: Message[];
@@ -36,16 +37,18 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ initialMessages}) => {
 
   return (
     <div className="flex flex-col h-full items-center mx-auto w-5/6">
-      <ScrollArea className="flex-1 h-4/5 w-full rounded-md border overflow-y-auto">
+      <ScrollArea className="flex-1 w-full rounded-md border overflow-y-auto bg-white ">
         <div className="p-4">
-          <h4 className="self-start mb-4 text-sm font-medium leading-none">UTSA+Gemini AI Academic Counselor</h4>
+          <h4 className="self-start mb-4 text-sm font-bold leading-none text-[#d3430d]">UTSA+Gemini AI Academic Advisor</h4>
           <Separator className="my-2 border-b" />
           <div className="flex gap-2 flex-col">
             {visibleMEssages.filter(m => m.role !== 'system').map(m => (
               <React.Fragment key={m.id}>
                 <div className="text-sm">
                   <div className="font-bold">{m.role === 'user' ? 'You' : 'Assistant'}:</div>
-                  <div className="m-2">{m.content}</div>
+                  <div className="m-2">
+                    <ReactMarkdown>{m.content}</ReactMarkdown>
+                  </div>
                 </div>
               </React.Fragment>
             ))}
@@ -59,7 +62,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ initialMessages}) => {
           onChange={handleInputChange}
           onKeyDown={handleKeyboardSubmit}
         />
-        <Button className="mt-2 w-full" onClick={(e) => handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>)}>Send Message</Button>
+        <Button className="mt-2 w-full bg-black text-white" onClick={(e) => handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>)}>Send Message</Button>
     </div>
   );
 };

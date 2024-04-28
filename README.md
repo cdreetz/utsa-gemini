@@ -1,36 +1,17 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Unlimited Context vs RAG
 
-## Getting Started
+`TLDR; Utilizing long context 100k-1m tokens results in 30s-60s responses which make poor chat experiences. Probably only useful for asynch processing`
 
-First, run the development server:
+There are some misconceptions on increasing context lengths and the use of retrieval in AI applications.  Since it's beginning there have been opinions on RAG around it being a bad solution, it is only a temporary practice, with little to no superior methods for increasing the knowledge of AI applications. Now with some models having context lengths upwards of 1 million tokens and quite a few models having 100k+, people are returning to say that these increases will result in RAG practices being useless.  
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 1 Million Tokens
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To start, for anyone who has built applications with retrieval and also built applications with extremely large context lengths, it's clear that they both have their use cases but retrieval is not going away and will likely not anytime soon.  For instance, in this application that uses Gemini 1.5 Pro with 1 million token length, responses are extremely slow.  Increasing token limits does not change the fact that all of those tokens still have to be processed.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Speed
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+In a lot of AI applications that use retrieval, chat experiences are very smooth because of sub 1 second time to first token and token generation near or faster than typical reading speed.  So sure you can pass in 900k tokens without needing retrieval but now you are processing 900k input tokens at some max speed leading to 30s-60s response times for simple questions.
 
-## Learn More
+## Comparisons
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+So the question now is when to use one or the other or both.  At this point it is unlikely that you would have some application that would need 1 million context length without first implementing retrieval.  If a user question can be used in some way to trim down the input by only getting the required sections of a knowledge base, use it.  The only times you might truly want to utilize the full large context is if you absolutely cannot remove any of the input documents, maybe because you don't actually know what you're looking for.  In this case it might be useful to simply pass in the entire documents, wait for the long response time, and have the model comb through all 900k tokens.

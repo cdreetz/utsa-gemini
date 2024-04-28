@@ -17,16 +17,25 @@ const buildGoogleGenAIPrompt = (messages: Message[]) => ({
 });
  
 export async function POST(req: Request) {
-  // Extract the `prompt` from the body of the request
-  const { messages } = await req.json();
- 
-  const geminiStream = await genAI
-    .getGenerativeModel({ model: 'gemini-1.5-pro-latest' })
-    .generateContentStream(buildGoogleGenAIPrompt(messages));
- 
-  // Convert the response into a friendly text-stream
-  const stream = GoogleGenerativeAIStream(geminiStream);
- 
-  // Respond with the stream
-  return new StreamingTextResponse(stream);
+  try {
+    // Extract the `prompt` from the body of the request
+    const { messages } = await req.json();
+  
+    const geminiStream = await genAI
+      .getGenerativeModel({ model: 'gemini-1.5-pro-latest' })
+      .generateContentStream(buildGoogleGenAIPrompt(messages));
+  
+    // Convert the response into a friendly text-stream
+    const stream = GoogleGenerativeAIStream(geminiStream);
+  
+    // Respond with the stream
+    return new StreamingTextResponse(stream);
+  } catch (error) {
+    console.error('Error in POST /api/chat', error);
+    if (error instanceof GoogleGenerativeAI) {
+      return new Response(JSON.stringify({ error: true, message: "The model is overloaded. Please try again later."}), { status: 503, headers: { 'Content-Type': 'application/json' } });
+    } else {
+      return new Response(JSON.stringify({ error: true, message: "An unexpected error occured."}), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    }
+  }
 }
