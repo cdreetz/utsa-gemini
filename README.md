@@ -1,3 +1,7 @@
+# UTSA AI Academic Advisor
+
+This application takes into consideration all of UTSA's undergraduate course catalog, and enables students to easily ask any sort of question on what programs are available, course details, and even get recommendations based on their interests or needs.
+
 # Unlimited Context vs RAG
 
 `TLDR; Utilizing long context 100k-1m tokens results in 30s-60s responses which make poor chat experiences. Probably only useful for asynch processing`
